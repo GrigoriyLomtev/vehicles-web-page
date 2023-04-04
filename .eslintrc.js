@@ -17,13 +17,11 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'prettier'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 'latest',
     project: 'tsconfig.json',
     sourceType: 'module',
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
     'prettier/prettier': 'error',
-    'no-param-reassign': ['warn', { props: false }],
   },
 };
