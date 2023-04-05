@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import VehicleCard from '../VehicleCard/VehicleCard';
-import { Box, Button, useTheme } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { VehicleApiClient } from '../../clients/VehicleApiClient';
 import { VehicleObject } from '../../types/types';
@@ -47,13 +47,16 @@ function VehiclesGrid() {
   useEffect(() => {
     const fetchMedia = async () => {
       const clientVehicles = new VehicleApiClient();
-      const vehicles = await clientVehicles.getAllVehicles();
-      setVehiclesList(vehicles);
-      console.log('useeff, fetch');
+      try {
+        const vehicles = await clientVehicles.getAllVehicles();
+        setVehiclesList(vehicles);
+        setIsFetch(true);
+      } catch (error) {
+        console.log(error);
+      }
     };
     if (!isFetch) {
       fetchMedia();
-      setIsFetch(true);
     }
   }, [vehiclesList, setVehiclesList]);
 
@@ -81,19 +84,23 @@ function VehiclesGrid() {
           },
         }}
       >
-        {vehiclesList.map(({ color, id, latitude, longitude, model, name, price, year }) => (
-          <VehicleCard
-            key={id}
-            id={id}
-            name={name}
-            model={model}
-            year={year}
-            color={color}
-            price={price}
-            latitude={latitude}
-            longitude={longitude}
-          />
-        ))}
+        {isFetch &&
+          vehiclesList.map(({ color, id, latitude, longitude, model, name, price, year }, index) => (
+            <VehicleCard
+              key={id}
+              id={id}
+              name={name}
+              model={model}
+              year={year}
+              color={color}
+              price={price}
+              latitude={latitude}
+              longitude={longitude}
+              index={index}
+              vehiclesList={vehiclesList}
+              setVehiclesList={setVehiclesList}
+            />
+          ))}
       </Box>
     </Box>
   );
